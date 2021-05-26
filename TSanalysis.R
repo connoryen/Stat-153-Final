@@ -76,14 +76,14 @@ specMax <- function(x) {
     return(rv)
 }
 
-backshiftPolynomialCoefficients <- function(ttable, p=0,q=0, P=0,Q=0,S=1) {
+backshiftPolynomialCoefficients <- function(coefs, p=0,q=0, P=0,Q=0,S=1) {
     'Backshift polynomial coefficients for an ARMA expression. 
     Designed to be used with the SARIMA() function.
 
     Parameters
     ----------
     first: double matrix
-        AR and MA coefficients. $ttable output of the SARIMA() 
+        AR and MA coefficients. $fit$coef output of the SARIMA() 
         function. 
     second: double
         AR order
@@ -104,7 +104,6 @@ backshiftPolynomialCoefficients <- function(ttable, p=0,q=0, P=0,Q=0,S=1) {
         second: MA
             coefficients of the backshift MA polynomial
     '
-
     ARMAcoefficients <- list("AR" = c(), "MA" = c())
     ARpoly <- list("little" = c(), "big" = c())
     MApoly <- list("little" = c(), "big" = c())
@@ -113,13 +112,13 @@ backshiftPolynomialCoefficients <- function(ttable, p=0,q=0, P=0,Q=0,S=1) {
     # Polynomials for "little phis" and "little thetas":
     if(p > 0){
         for(i in c(1:p)){
-            ARpoly$little <- c(ARpoly$little, ttable[i])
+            ARpoly$little <- c(ARpoly$little, coefs[i])
         }
     }
     ARpoly$little <- c(1, ARpoly$little)
     if(q > 0){
         for(i in c(1:q)){
-            MApoly$little <- c(MApoly$little, ttable[i+p])
+            MApoly$little <- c(MApoly$little, coefs[i+p])
         }
     }
     MApoly$little <- c(1, MApoly$little)
@@ -129,14 +128,14 @@ backshiftPolynomialCoefficients <- function(ttable, p=0,q=0, P=0,Q=0,S=1) {
     if(P > 0){
         for(i in c(1:P)){
             ARpoly$big <- c(ARpoly$big, 
-                            rep(0, (S-1)), ttable[i+p+q])
+                            rep(0, (S-1)), coefs[i+p+q])
         }
     }
     ARpoly$big <- c(1, ARpoly$big)
     if(Q > 0){
         for(i in c(1:Q)){
             MApoly$big <- c(MApoly$big, 
-                            rep(0, (S-1)), ttable[i+p+q+P])
+                            rep(0, (S-1)), coefs[i+p+q+P])
         }
     }
     MApoly$big <- c(1, MApoly$big)
