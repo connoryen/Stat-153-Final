@@ -1,11 +1,18 @@
+if (!require(astsa)) install.packages('astsa')
 library(astsa)
+if (!require(forecast)) install.packages('forecast')
 library(forecast)
+if (!require(FitAR)) install.packages('FitAR')
 library(FitAR)
+if (!require(Metrics)) install.packages('Metrics')
 library(Metrics)
+if (!require(pracma)) install.packages('pracma')
 library(pracma)
 
+
 localMaxima <- function(x) {
-    'Find indecies of local maxima of a sequential list. 
+    'Find indecies of local maxima of a sequential list.
+    Returns first index if x contains consecutive maxima. 
 
     Parameters
     ----------
@@ -17,7 +24,9 @@ localMaxima <- function(x) {
     list
         indecies of local maxima
     '
-    
+
+    if (length(x) == 0) return(c())
+
     y <- diff(c(-Inf, x)) > 0L
     rle(y)$lengths
     y <- cumsum(rle(y)$lengths)
@@ -25,7 +34,9 @@ localMaxima <- function(x) {
     if (x[[1]] == x[[2]]) {
         y <- y[-1]
     }
-    y
+
+    if (length(y) == 0) return(c())
+    return(y)
 }
 
 pgram <- function(x){
