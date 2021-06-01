@@ -39,7 +39,7 @@ localMaxima <- function(x) {
     return(y)
 }
 
-pgram <- function(x){
+pgram <- function(x, plot = TRUE){
     'Discrete periodigram for a time series via FFT. 
     index/length(x) gives the sinusoid frequencies 
     from the fourier frequencies. 
@@ -56,8 +56,7 @@ pgram <- function(x){
     '
     m = floor(length(x)/2)
     pgram = abs(fft(x)[2:(m+1)])^2/length(x)
-    plot(pgram, type = "h")
-    abline(h=0)
+    if (plot) {plot(pgram, type = "h"); abline(h=0)}
     return(pgram)
 }
 
