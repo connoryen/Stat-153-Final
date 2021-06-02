@@ -8,7 +8,8 @@ if (!require(Metrics)) install.packages('Metrics')
 library(Metrics)
 if (!require(pracma)) install.packages('pracma')
 library(pracma)
-
+if (!require(TSA)) install.packages('TSA')
+library(TSA)
 
 localMaxima <- function(x) {
     'Find indecies of local maxima of a sequential list.
