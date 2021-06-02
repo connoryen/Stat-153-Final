@@ -46,3 +46,18 @@ test_that(
     }
 )
 
+test_that(
+    "mvspec2",
+    {
+        n=100; t = 1:n; 
+        x = cos(2*pi*t*(1/6)) + sin(4*pi*t*(1/3)) + sin(6*pi*t*(1/4))
+        s <- mvspec2(x, plot = FALSE)
+        
+        exp <- matrix(c(c(0.25, 0.33, 0.17), 
+                        c(24.3943512420822, 17.3020987496783, 16.2020222767867)), 
+                      byrow = F, nc = 2)
+        colnames(exp) = c("freq", "spec")
+        
+        expect_equal(s$maxSpecs, exp)
+    }
+)

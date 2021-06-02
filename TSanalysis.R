@@ -60,7 +60,7 @@ pgram <- function(x, plot = TRUE){
     return(pgram)
 }
 
-specMax <- function(x) {
+mvspec2 <- function(x, plot = TRUE, mark = FALSE) {
     'Compute the spectral density of a time series x. 
     Return frequencies of spectral maxima in descending order.
     Recall that spectral frequencies are the same as sinusoid frequencies. 
@@ -75,15 +75,25 @@ specMax <- function(x) {
     vector
         frequencies of spectral maxima
     '
-
-    s <- mvspec(x)
-    maxs.index <- localMaxima(s$spec)  # find indecies of local maxima
-    maxs <- s$freq[maxs.index]  # frequency values of local maxima
-    maxs.val <- s$spec[maxs.index]  # spec values of local maxima
+    if(plot == FALSE & mark == TRUE) {
+        stop("plot must be true for mark to be true")
+    }
     
-    rv <- maxs[order(-maxs.val)]  # put maxs in decreasing order
+    s <- mvspec(x, plot = plot)
     
-    return(rv)
+    m <- matrix(c(s$freq, s$spec) , byrow = F, nc = 2)
+    m <- matrix(m[localMaxima(m[,2]), ], byrow = F, nc = 2)
+    m <- matrix(m[(m[,2] > mean(s$spec)), ], byrow = F, nc = 2)
+    m <- matrix(m[order(-m[,2]), ], byrow = F, nc = 2)
+    colnames(m) <- c("freq", "spec")
+    
+    s$maxSpecs <- m
+    
+    if(mark == TRUE){
+        for (i in c(1:length(m[,1]))) {abline(v = m[i,1], col = "blue")}
+    }
+    
+    return(s)
 }
 
 backshiftPolynomialCoefficients <- function(coefs, p=0,q=0, P=0,Q=0,S=1) {
